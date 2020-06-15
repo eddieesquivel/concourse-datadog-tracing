@@ -1,0 +1,55 @@
+apiVersion: apps/v1 
+kind: DaemonSet
+metadata:
+  name: oc-agent
+  labels:
+    app: opencensus
+    component: oc-agent
+spec:
+  selector:
+    matchLabels:
+      app: opencensus
+      component: oc-agent
+  template:
+    metadata:
+      labels:
+        app: opencensus
+        component: oc-agent
+    spec:
+      containers:
+      - command:
+          - "/ocagent_linux"
+          - "--config=/conf/oc-agent-config.yaml"
+        image: omnition/opencensus-agent:0.1.6
+        name: oc-agent
+        resources:
+          limits:
+            cpu: 500m
+            memory: 500Mi
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        ports:
+        - containerPort: 14268
+          hostPort: 14268
+        volumeMounts:
+        - name: oc-agent-config
+          mountPath: /conf
+      initContainers:
+      - name: init-create-config
+        image: eddstar/opencensus-agent-init:1.1
+        env:
+          - name: HOST_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.hostIP 
+          - name: NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath:  metadata.namespace
+        volumeMounts:
+        - name: oc-agent-config
+          mountPath: /conf
+      volumes:
+      - name: oc-agent-config
+        emptyDir: {}

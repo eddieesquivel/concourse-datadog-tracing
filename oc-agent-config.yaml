@@ -1,0 +1,8 @@
+receivers:
+  jaeger: 
+    jaeger-thrift-http-port: 14268 
+exporters:
+  datadog:
+    namespace: "{{ namespace }}"
+    trace_addr: "{{ host_ip }}:8126"
+    enable_tracing: true
