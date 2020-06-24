@@ -9,7 +9,7 @@ We're deploying both Concourse and the Datadog agents on K8s
 
 ### Configuring Concourse
 
-You'll have to modify the Concourse Worker with the following additions\modification to the ENV variables.
+You'll have to modify the Concourse Worker with the following additions\modifications to the ENV variables.
 
 We'll use the downward API to reference the node the worker is deployed on. This pod will end up communicating with the Opencensus Agent.
 
@@ -27,9 +27,9 @@ We'll use the downward API to reference the node the worker is deployed on. This
 
 1) You'll have to enable APM: https://docs.datadoghq.com/agent/kubernetes/apm/?tab=helm
 
-This allows the Datadog agent to listent for events\traces on port 8126.
+This allows the Datadog agent to listen for events\traces on port 8126.
 
-2) On the trace-agent init container you'll have to make the 8126 port a hostPort. This is so that Opencensus agent can traces to the agent via localhost:8126
+2) On the trace-agent init container you'll have to make the 8126 port a hostPort. This is so that Opencensus agent can send traces to the Datadog agent via localhost:8126
 
 ```
         ports:
